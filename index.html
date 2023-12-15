@@ -6,6 +6,7 @@
         content="Polynomial-fitting based accurate differential operators for hybrid neural fields like Instant NGP">
   <meta name="keywords" content="Neural Fields, Derivatives, Instant NGP, hybrid neural fields">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  
   <title>Accurate Differential Operators for Neural Fields</title>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -39,6 +40,37 @@
   <script src="./static/js/bulma-carousel.min.js"></script>
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
+
+  <style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th {
+        text-align: left;
+        padding: 8px;
+        border-bottom-width: 0;
+        background-color: #f2f2f2;
+    }
+
+    #table1 td {
+      text-align: left;
+      padding: 8px;
+      border-bottom-width: 0;
+    }
+
+    #table2 td {
+        text-align: left;
+        padding: 8px;
+        border-bottom-width: 0;
+    }
+    
+
+    .bottom-border {
+        border-bottom: 2px solid #dddddd;
+    }
+  </style>
 </head>
 <body>
 
@@ -113,9 +145,9 @@
   <div class="container is-max-desktop">
     <div class="hero-body">
       <img src="./static/images/teaser.png" width="100%">
-      <h2 class="subtitle has-text-centered">
+      <div class="subtitle has-text-centered">
         Our approach can compute accurate derivatives (illustrated here by surface normals) from hybrid neural fields like <span class="dnerf">Instant NGP</span>, compared to Autodiff.
-      </h2>
+      </div>
     </div>
   </div>
 </section>
@@ -129,12 +161,287 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
-          <p>Neural fields have become widely used in various fields, from shape representation to neural rendering, and for solving partial differential equations (PDEs). With the advent of hybrid neural field representations like Instant NGP that leverage small MLPs and explicit representations, these models train quickly and can fit large scenes. Yet in many applications like rendering and simulation, hybrid neural fields can cause noticeable and unreasonable artifacts. This is because they do not yield accurate spatial derivatives needed for these downstream applications.</p>
+          <p>Neural fields have become widely used in various fields, from shape representation to neural rendering, and for solving partial differential equations (PDEs). With the advent of hybrid neural field representations like <span class="dnerf">Instant NGP</span> that leverage small MLPs and explicit representations, these models train quickly and can fit large scenes. Yet in many applications like rendering and simulation, hybrid neural fields can cause noticeable and unreasonable artifacts. This is because they do not yield accurate spatial derivatives needed for these downstream applications.</p>
           <p>In this work, we propose two ways to circumvent these challenges. Our first approach is a post hoc operator that uses local polynomial-fitting to obtain more accurate derivatives from pre-trained hybrid neural fields. Additionally, we also propose a self-supervised fine-tuning approach that refines the neural field to yield accurate derivatives directly while preserving the initial signal. We show the application of our method on rendering, collision simulation, and solving PDEs. We observe that using our approach yields more accurate derivatives, reducing artifacts and leading to more accurate simulations in downstream applications.</p>
         </div>
       </div>
     </div>
     <!--/ Abstract. -->
+
+    <!-- Visual Effects. -->
+    <div class="column">
+      <div class="content">
+        <h2 class="title is-3">High-frequency noise in hybrid neural fields</h2>
+        <p>
+          We observe that hybrid neural fields contain high-frequency noise in the learned signal. This noise can cause artifacts in derivatives computed using automatic differentiation. 
+        </p>
+        <section class="hero teaser">
+          <div class="container is-max-desktop">
+            <div class="hero-body">
+              <img src="./static/images/fig2_iclr.png" width="52%">
+              <img src="./static/images/fft_1d_slice.png" width="47%">
+              <div class="subtitle has-text-centered">
+                <b>(Left) Inaccurate differential operators of neural fields.</b> Hybrid neural SDF of a circle in 2D. <b>(Right) Fourier spectrum of a hybrid neural SDF.</b> Computed over a 1D slice (dashed line in left) of the SDF of a 2D circle.
+              </div>
+            </div>
+          </div>
+        </section>
+        <p>These artifacts cause issues in downstream applications like rendering and solving PDEs with hybrid neural fields.</p>
+        <h2 class="title is-3">Method</h2>
+        <p>
+          We propose two approaches to alleviate this problem: post hoc polynomial-fitting operators and a fine-tuning approach to improve the accuracy of autodiff derivatives.
+        </p>
+        <section class="hero teaser">
+          <div class="container is-max-desktop">
+            <div class="hero-body">
+              <img src="./static/images/problem_setup.png" width="70%" style="display: block; margin-left: auto; margin-right:auto">
+              <div class="subtitle has-text-centered">
+                Given a pre-trained hybrid neural field with noisy autodiff derivatives, we propose two approaches for accurate derivatives. Our polynomial-fitting operator can be applied in a post hoc manner while our fine-tuning approach directly improves autodiff derivatives of the field.
+              </div>
+            </div>
+          </div>
+        </section>
+        <h3 class="title is-4">Post hoc polynomial-fitting derivatives</h3>
+        <p>Given a pre-trained hybrid neural field and a query point, we propose fitting a polynomial through the local neighborhood of the query point. We then compute autodiff derivatives of this fitted polynomial instead of the learned signal.</p>
+        <h3 class="title is-4">Fine-tuning approach</h3>
+        <p>Since our post hoc operators would require changes in the downstream pipelines. To prevent this, we also propose a fine-tuning approach that aligns the autodiff derivatives of hybrid neural fields with the smoothed derivatives from alternative sources like our post hoc operators or finite-difference stencils, while preserving the original 0<sup>th</sup> order signal. Our fine-tuning objective is independent of the type of smoothed derivative operator itself.</p>
+        
+        
+        <h2 class="title is-3">Results</h2>
+        <p>We evaluate our methods on hybrid neural SDFs of 3D shapes from the <span class="dnerf"><a href="https://www.cg.tuwien.ac.at/research/publications/2020/erler-2020-p2s/">FamousShape</a></span> dataset. We compare normals and mean curvatures obtained from our operators with baselines like autodiff and finite-difference stencils. We experiment with tree type of hybrid neural fields: <span class="dnerf"><a href="https://nvlabs.github.io/instant-ngp/">Instant NGP</a></span>, Dense Grid, and <span class="dnerf"><a href="https://nvlabs.github.io/eg3d/">Tri-plane</a></span> (only post hoc analysis).</p>
+        
+        <p>Our <b>post hoc operators</b> are able to provide more accurate derivatives than finite-difference or autodiff baselines.</p>
+        
+        <table id="table1">
+          <caption><strong>Operator Evaluation</strong>. We compare against autodiff (AD) and finite difference (FD) baselines. Note that our approach provides more accurate surface normals and mean curvature than the baselines.</caption>
+          <thead>
+              <tr>
+                  <th>Model</th>
+                  <th>Method</th>
+                  <th colspan="4" style="text-align: center;">Surface Normal</th>
+                  <th  style="text-align: left;">Mean<br> Curvature</th>
+              </tr>
+              <tr>
+                  <th></th>
+                  <th></th>
+                  <th>L2 &darr;</th>
+                  <th>Ang &darr;</th>
+                  <th>AA@1 &uarr;</th>
+                  <th>AA@2 &uarr;</th>
+                  <th>RRE &darr;</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td rowspan="3"><span class="dnerf">Instant NGP</span></td>
+                  <td>AD</td>
+                  <td>0.21</td>
+                  <td>12.40</td>
+                  <td>1.58</td>
+                  <td>6.12</td>
+                  <td>-</td>
+              </tr>
+              <tr>
+                  <td>FD</td>
+                  <td>0.07</td>
+                  <td>4.20</td>
+                  <td>26.86</td>
+                  <td>55.22</td>
+                  <td>3.67</td>
+              </tr>
+              <tr class="bottom-border">
+                  <td>Ours</td>
+                  <td><strong>0.05</strong></td>
+                  <td><strong>2.80</strong></td>
+                  <td><strong>42.92</strong></td>
+                  <td><strong>67.90</strong></td>
+                  <td><strong>0.89</strong></td>
+              </tr>
+              <tr>
+                  <td rowspan="3">Dense Grid</td>
+                  <td>AD</td>
+                  <td>0.11</td>
+                  <td>6.55</td>
+                  <td>11.49</td>
+                  <td>29.40</td>
+                  <td>-</td>
+              </tr>
+              <tr>
+                  <td>FD</td>
+                  <td>0.07</td>
+                  <td>3.97</td>
+                  <td>30.66</td>
+                  <td>55.06</td>
+                  <td>2.62</td>
+              </tr>
+              <tr class="bottom-border">
+                  <td>Ours</td>
+                  <td><strong>0.06</strong></td>
+                  <td><strong>3.31</strong></td>
+                  <td><strong>38.95</strong></td>
+                  <td><strong>62.65</strong></td>
+                  <td><strong>0.89</strong></td>
+              </tr>
+              <tr>
+                  <td rowspan="3"><span class="dnerf">Tri-plane</span></td>
+                  <td>AD</td>
+                  <td>0.15</td>
+                  <td>8.59</td>
+                  <td>3.61</td>
+                  <td>13.13</td>
+                  <td>-</td>
+              </tr>
+              <tr>
+                  <td>FD</td>
+                  <td>0.07</td>
+                  <td>4.19</td>
+                  <td>23.42</td>
+                  <td>51.27</td>
+                  <td>4.12</td>
+              </tr>
+              <tr class="bottom-border">
+                  <td>Ours</td>
+                  <td><strong>0.06</strong></td>
+                  <td><strong>3.23</strong></td>
+                  <td><strong>35.67</strong></td>
+                  <td><strong>62.74</strong></td>
+                  <td><strong>0.90</strong></td>
+              </tr>
+            </tbody>
+        </table>
+
+        <p>Our <b>fine-tuning</b> approach also yields more accurate autodiff operators than directly applying autodiff, while preserving the fidelity of the original neural field.</p>
+
+        <table id="table2">
+          <caption><strong>Effect of Fine-tuning</strong>. Our fine-tuning approach improves the accuracy of surface normals obtained from automatic differentiation. We compare autodiff operators before (first row) and after fine-tuning.</caption>
+          <thead>
+              <tr class="bottom-border">
+                  <th rowspan="2">Model</th>
+                  <th rowspan="2">Fine-tuning operator</th>
+                  <th colspan="4" class="bottom-border" style="text-align: center;">Surface Normal</th>
+                  <th colspan="2" class="bottom-border" style="text-align: center;">Mesh Reconstruction</th>
+              </tr>
+              <tr>
+                  <th>L2 &darr;</th>
+                  <th>Ang &darr;</th>
+                  <th>AA@1 &uarr;</th>
+                  <th>AA@2 &uarr;</th>
+                  <th>CD &darr;</th>
+                  <th>F-Score &uarr;</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td rowspan="3"><span class="dnerf">Instant NGP</span></td>
+                  <td>-</td>
+                  <td>0.21</td>
+                  <td>12.40</td>
+                  <td>1.58</td>
+                  <td>6.12</td>
+                  <td>9.24 &times; 10<sup>-4</sup></td>
+                  <td>93.07</td>
+              </tr>
+              <tr>
+                  <td>Finite difference</td>
+                  <td>0.08</td>
+                  <td>5.14</td>
+                  <td>21.16</td>
+                  <td>46.63</td>
+                  <td>9.35 &times; 10<sup>-4</sup></td>
+                  <td>90.24</td>
+              </tr>
+              <tr class="bottom-border">
+                  <td>Polynomial-fit</td>
+                  <td><strong>0.05</strong></td>
+                  <td><strong>3.19</strong></td>
+                  <td><strong>33.60</strong></td>
+                  <td><strong>60.24</strong></td>
+                  <td>9.28 &times; 10<sup>-4</sup></td>
+                  <td>92.28</td>
+              </tr>
+              <tr>
+                  <td rowspan="3">Dense Grid</td>
+                  <td>-</td>
+                  <td>0.11</td>
+                  <td>6.56</td>
+                  <td>11.42</td>
+                  <td>29.37</td>
+                  <td>9.26 &times; 10<sup>-4</sup></td>
+                  <td>89.83</td>
+              </tr>
+              <tr>
+                  <td>Finite difference</td>
+                  <td>0.09</td>
+                  <td>5.09</td>
+                  <td>18.82</td>
+                  <td>41.52</td>
+                  <td>9.23 &times; 10<sup>-4</sup></td>
+                  <td>88.94</td>
+              </tr>
+              <tr class="bottom-border">
+                  <td>Polynomial-fit</td>
+                  <td><strong>0.08</strong></td>
+                  <td><strong>4.40</strong></td>
+                  <td><strong>29.32</strong></td>
+                  <td><strong>51.40</strong></td>
+                  <td>9.25 &times; 10<sup>-4</sup></td>
+                  <td>87.66</td>
+              </tr>
+          </tbody>
+      </table>
+  
+
+        
+        <h2 class="title is-3">Applications</h2>
+        <p>Our approaches also provide advantages in downstream applications of hybrid neural fields.</p>
+        <h3 class="title is-4">Rendering</h3>
+        <p>Rendering hybrid neural SDFs with our approaches yields results that are free from unnecessary artifacts that arise in the case of directly using of autodiff derivatives.</p>
+        <section class="hero teaser">
+          <div class="container is-max-desktop">
+            <div class="hero-body">
+              <img src="./static/images/rendering_iclr.png" width="100%">
+              <div class="subtitle has-text-centered">
+                <b>Accurate Normals for Rendering.</b> A perfectly specular sphere lighted by an environment map (top) and a diffuse Armadillo (inset) lit by a light source put in front of the object (bottom). In both cases, noisy normals from autodiff lead to artifacts in rendering as shown in the highlighted parts, that are mitigated by our approaches.
+              </div>
+            </div>
+          </div>
+        </section>
+        <h3 class="title is-4">Collision simulation</h3>
+        <p>Surface normals are required for accurate simulations when modeling collisions to compute trajectories. We consider the case of two spheres undergoing head-on collisions and simulate their trajectories post-collision. To obtain these trajectories, we use the normal estimates from the two SDFs at the analytical point of contact.</p>
+        <section class="hero teaser">
+          <div class="container is-max-desktop">
+            <div class="hero-body">
+              <img src="./static/images/coll_gt2.png" width="48%">
+              <img src="./static/images/coll_autodiff2.png" width="48%">
+              <div class="subtitle has-text-centered">
+                <b>Effect of noisy normals on collision.</b> An illustration of the effect of noisy normals on collision. Two spheres undergoing perfectly elastic head-on collisions simulated using correct surface normals will re-trace their paths after a collision. Inaccurate normal estimates from autodiff yield incorrect trajectories after bouncing.
+              </div>
+            </div>
+          </div>
+        </section>
+        <p>We model the collisions as perfectly elastic so that there is no loss of energy. In the ideal case, the spheres should rebound along the line joining the centers with the same velocity, but erroneous normal estimates will lead to incorrect trajectories.</p>
+        <p>Averaged over 10<sup>6</sup> trials, the mean error obtained from our normals was 0.85&deg, compared to 11.51&deg for autodiff normals.</p>
+        
+        <h3 class="title is-4">Solving PDEs</h3>
+        <section>
+          <div class="columns is-centered">
+            <div class="column">
+              <p>We show that using our operators for solving a 2D advection equation using a hybrid neural field prevents the solution error from exploding. We solve an initial value problem with the gaussian pulse being advected with a constant velocity.</p>
+              <p>We plot the mean squared error (MSE) for a finite difference grid solver, autodiff gradients (AD), and our polynomial-fitting approach. The error for AD explodes after the first few seconds and eventually crashes (indicated by &times;)</p>
+            </div>
+            <div class="column">
+              <img src="./static/images/pde_loss.png" width="100%">
+              <!-- <div class="caption">
+                <b>Effect of inaccurate gradients in PDE simulation</b>. Mean squared error (MSE) in a 2D advection simulation, for a finite difference grid solver, autodiff gradients (AD), and our polynomial-fitting approach. The error for AD explodes after the first few seconds and eventually crashes (indicated by &times;).
+              </div> -->
+            </div>
+          </div>
+        
+      </div>
+      
+      
+    </div>
+    <!--/ Visual Effects. -->
 
     <!-- Paper video. -->
     <!-- <div class="columns is-centered has-text-centered">
@@ -149,6 +456,8 @@
     <!--/ Paper video. -->
   </div>
 </section>
+
+
 
 
 
