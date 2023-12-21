@@ -17,8 +17,7 @@ class SDFDataset(Dataset):
                  bound=1.0,
                  sample_from_net=False,
                  sigma=None,
-                 n_walks=None,
-                 reproj_mode="ad"):
+                 n_walks=None,):
         super().__init__()
         self.path = path
         self.net = net
@@ -31,7 +30,6 @@ class SDFDataset(Dataset):
         # for network-based point sampling
         self.sigma = sigma
         self.n_walks = n_walks
-        self.reproj_mode = reproj_mode
 
         # load obj
         self.mesh = trimesh.load(path, force='mesh')
@@ -182,8 +180,7 @@ def get_data_loaders(cfg, net=None):
         use_sphere_gt_sdf=cfg_tr.get("use_sphere_gt_sdf", False),
         sample_from_net=cfg_tr.get("sample_from_net", False),
         sigma=cfg_tr.get("sigma", 2e-2),
-        n_walks=cfg_tr.get("n_walks", 256),
-        reproj_mode=cfg_tr.get("reproj_mode", "ad")
+        n_walks=cfg_tr.get("n_walks", 256)
     )
     cfg_te = cfg.val
     te_dataset = SDFDataset(
@@ -199,8 +196,7 @@ def get_data_loaders(cfg, net=None):
         use_sphere_gt_sdf=cfg_te.get("use_sphere_gt_sdf", False),
         sample_from_net=cfg_tr.get("sample_from_net", False),
         sigma=cfg_tr.get("sigma", 2e-2),
-        n_walks=cfg_tr.get("n_walks", 256),
-        reproj_mode=cfg_tr.get("reproj_mode", "ad")
+        n_walks=cfg_tr.get("n_walks", 256)
     )
     train_loader = data.DataLoader(
         dataset=tr_dataset, batch_size=cfg.train.batch_size, shuffle=True,
