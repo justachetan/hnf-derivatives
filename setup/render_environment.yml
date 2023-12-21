@@ -1,4 +1,4 @@
-name: fd-ext-nie
+name: hnf-render
 channels:
   - defaults
   - conda-forge
@@ -117,4 +117,3 @@ dependencies:
   - defaults/linux-64::numpy==1.23.5=py39h14f4228_0
   - pytorch/linux-64::torchaudio==0.12.1=py39_cu113
   - pytorch/linux-64::torchvision==0.13.1=py39_cu113
-prefix: /home/ac2538/.conda/envs/fd-ext-nie

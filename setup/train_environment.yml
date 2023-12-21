@@ -1,4 +1,4 @@
-name: tngp-nie-2
+name: hnf-train
 channels:
   - defaults
   - conda-forge
@@ -225,4 +225,3 @@ dependencies:
   - pykdtree
   - pigz
   - mscorefonts
-prefix: /home/ac2538/.conda/envs/tngp-nie-2
