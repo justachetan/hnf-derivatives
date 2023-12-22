@@ -27,3 +27,11 @@ python -m ipykernel install --user --name=hnf-render
 conda deactivate
 echo "hnf-render is ready to use! activate with: conda activate hnf-render"
 ```
+
+## Downloading checkpoints
+
+For the rendering demo, download the checkpoints from [here](https://drive.google.com/drive/folders/1XwzWs5Cz7ymBU4vHyO4p5fmx4Vp7t0rH?usp=sharing) using:
+```bash
+pip install --upgrade gdown
+python3 download_checkpoints.py
+```

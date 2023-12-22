@@ -4,6 +4,12 @@ This repository contains the associated code for the paper titled
 
 >[Accurate Differential Operators for Hybrid Neural Fields](https://arxiv.org/abs/2312.05984). *[Aditya Chetan](https://justachetan.github.io), [Guandao Yang](https://www.guandaoyang.com/), [Zichen Wang](https://zichenwang01.github.io/), [Steve Marschner](https://www.cs.cornell.edu/~srm/), [Bharath Hariharan](https://www.cs.cornell.edu/~bharathh/)*.
 
+
+## Updates
+
+- **[2021/12/22]** Initial code release.
+- **[2023/12/10]** Code release coming soon!
+
 ## Setup
 
 For setting up the environments required for training the models and running the rendering experiments, use the following commands:
@@ -46,8 +52,26 @@ In order to view rendering results:
 ```bash
 conda activate hnf-render
 ```
-1. 
+1. Now open the notebook `rendering.ipynb` and run the cells in order.
+2. Feel free to add your own shapes by training models as described above and adding settings for the shape in the `settings_dict` variable in the notebook.
 
-## Updates
 
-- **[2023/12/10]** Code release coming soon!
+
+## Citation
+
+If you found the code in this repository useful, please consider citing our paper:
+
+```
+@misc{chetan2023accurate,
+      title={Accurate Differential Operators for Hybrid Neural Fields}, 
+      author={Aditya Chetan and Guandao Yang and Zichen Wang and Steve Marschner and Bharath Hariharan},
+      year={2023},
+      eprint={2312.05984},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
+
+## Acknowledgements
+
+We thank the authors of [torch-ngp](https://github.com/ashawkey/torch-ngp), [ldif](https://github.com/google/ldif), [tiny-cuda-nn](https://github.com/NVlabs/tiny-cuda-nn) for making their code publicly available. 
