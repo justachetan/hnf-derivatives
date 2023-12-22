@@ -79,7 +79,6 @@ def sphere_trace(sdf, origin, dir, max_steps=100):
                 dist = dist.cpu()
             
             if mask.all():
-                print("all converged")
                 break
 
     return p, mask.cpu()
