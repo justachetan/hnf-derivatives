@@ -23,7 +23,7 @@ frozenlist==1.4.0
 fsspec==2023.6.0
 google-auth==2.22.0
 google-auth-oauthlib==1.0.0
-grpcio==1.56.2
+grpcio==1.53.0
 idna==3.4
 imageio==2.31.1
 imageio-ffmpeg==0.4.8
