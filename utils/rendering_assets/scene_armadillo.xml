@@ -1,0 +1,26 @@
+<scene version="0.6.0">
+    <integrator type="path">
+        <integer name="max_depth" value="2"/>
+    </integrator>
+
+
+    <sensor type="perspective">
+        <float name="fov" value="45"/>
+        <transform name="toWorld">
+            <lookat origin="0, 0, -1" target="0, 0, 0" up="0,1,0"/>
+        </transform>
+        <film type="hdrfilm">
+            <integer name="width" value="512"/>
+            <integer name="height" value="512"/>
+        </film>
+    </sensor>
+
+
+
+    <shape type="obj">
+        <string name="filename" value="../../data/armadillo.obj"/>
+
+    </shape>
+
+   
+</scene>
