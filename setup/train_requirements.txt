@@ -22,7 +22,7 @@ cloudpickle==2.0.0
 colorama==0.4.5
 commentjson==0.9.0
 commonmark==0.9.1
-cryptography==37.0.1
+cryptography==41.0.6
 cycler==0.11.0
 cytoolz==0.11.0
 dask==2021.10.0

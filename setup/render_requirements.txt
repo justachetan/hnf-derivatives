@@ -11,7 +11,7 @@ cachetools==5.3.1
 certifi==2022.12.7
 cffi==1.15.1
 charset-normalizer==2.0.4
-cryptography==39.0.1
+cryptography==41.0.6
 cycler==0.11.0
 decorator==5.1.1
 drjit==0.4.2
