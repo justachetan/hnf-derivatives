@@ -12,11 +12,7 @@ This repository contains the associated code for the paper titled
 
 ## Setup
 
-For setting up the environments required for training the models and running the rendering experiments, use the following commands:
-```bash
-cd setup
-bash setup.sh
-```
+For setting up the environments required for training the models and running the rendering demo, please follow the steps given in [`setup`](setup/README.md).
 
 ## Experiments
 
