@@ -1,0 +1,50 @@
+data:
+  mult_scalar: 1.0
+  num_workers: 1
+  train:
+    batch_size: 1
+    normalize_mesh: false
+    num_samples: 262144
+    path: data/armadillo.obj
+    size: 100
+    use_sphere_gt_sdf: false
+  type: datasets.ingp_sdf
+  val:
+    batch_size: 1
+    normalize_mesh: false
+    num_samples: 262144
+    path: data/armadillo.obj
+    size: 1
+    use_sphere_gt_sdf: false
+log_every_n_steps: 10
+models:
+  net:
+    enc:
+      max_res: 2048
+      otype: HashGrid
+    hidden_dim: 64
+    network_type: torch
+    num_layers: 3
+    type: models.tcnn_ingp
+save_every_n_epochs: 10
+trainer:
+  epochs: 140
+  loss_type: mse
+  mc_res: 256
+  opt:
+    lr: 0.0002
+    step_size: 1000000
+    gamma: 0.2
+  reg: True
+  polyfit_reg:
+    is_ft: True # is this fine-tuning?
+    grad:
+      wt: 1
+      sigma: 0.002
+      n_walks: 256
+      doall: True
+      mode: polyfit
+      from_epoch: 99 # which epoch to start this from  
+  type: trainers.sdf_trainer
+val_every_n_epochs: 50
+viz_every_n_steps: 1000

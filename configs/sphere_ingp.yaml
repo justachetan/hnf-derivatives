@@ -1,0 +1,38 @@
+data:
+  mult_scalar: 1.0
+  num_workers: 1
+  train:
+    batch_size: 1
+    num_samples: 262144
+    path: data/sphere.obj
+    size: 100
+    use_sphere_gt_sdf: true
+  type: datasets.ingp_sdf
+  val:
+    batch_size: 1
+    num_samples: 262144
+    path: data/sphere.obj
+    size: 1
+    use_sphere_gt_sdf: true
+log_every_n_steps: 10
+models:
+  net:
+    enc:
+      max_res: 2048
+      otype: HashGrid
+    hidden_dim: 64
+    network_type: torch
+    num_layers: 3
+    type: models.tcnn_ingp
+save_every_n_epochs: 10
+trainer:
+  epochs: 100
+  loss_type: mse
+  mc_res: 256
+  opt:
+    gamma: 0.2
+    lr: 0.001
+    step_size: 5
+  type: trainers.sdf_trainer
+val_every_n_epochs: 50
+viz_every_n_steps: 1000
