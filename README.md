@@ -7,7 +7,7 @@ This repository contains the associated code for the paper titled
 
 ## Updates
 
-- **[2021/12/22]** Initial code release.
+- **[2023/12/22]** Initial code release.
 - **[2023/12/10]** Code release coming soon!
 
 ## Setup
