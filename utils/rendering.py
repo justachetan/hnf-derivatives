@@ -29,7 +29,6 @@ from utils.fd_utils import fd_stencil_cen
 from utils.sphere_tracer import Camera, sphere_trace, shade, shade_normal, shade_diffuse, shade_specular
 
 from models.tcnn_ingp import TCNNInstantNGP
-from models.tngp_ingp import TNGPInstantNGP
 from models.triplane import Net
 
 import matplotlib
@@ -46,6 +45,30 @@ shader_dict = {
     "mirror": shade
 }
 
+def load_model_ckpt(
+    logdir: str,
+):
+    """
+    load model from a log directory
+    """
+    
+    init_ckpt_fn = os.path.join(logdir, "latest.pt")
+    init_cfg_fn = os.path.join(logdir, "config", "config.yaml")
+
+    
+
+    with open(init_cfg_fn, 'r') as f:
+        cfg = yaml.load(f, Loader=yaml.Loader)
+
+    sn_lib = importlib.import_module(cfg.models.net.type)
+    model = sn_lib.Net(cfg, cfg.models.net)
+    model.cuda()
+
+    # Resume pretrained model
+    init_path = init_ckpt_fn
+    model.load_state_dict(torch.load(init_path)['net'], strict=True)
+
+    return model
 
 def get_ray_trace_img(
     scene_file: str,
