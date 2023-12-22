@@ -1,3 +1,4 @@
+import os
 import torch 
 import numpy as np 
 import cv2 as cv
@@ -5,6 +6,8 @@ import cv2 as cv
 eps = 1e-3
 
 spp = 2
+
+abs_path_prefix = os.path.dirname(__file__)
 
 def normalize(v):
     return v / (torch.norm(v, dim=1, keepdim=True) + 1e-6)
@@ -62,7 +65,6 @@ def sphere_trace(sdf, origin, dir, max_steps=100):
                 dir_batch = dir[sidx:eidx]
 
                 dist = sdf(p_batch) # bs x 1
-                # print(dist)
 
                 p_batch += dist * dir_batch
 
@@ -94,7 +96,7 @@ def shade_diffuse_once(mask, itx, normal, wi):
     u = torch.atan2(wo[:, 0], wo[:, 2]) / (2 * np.pi)
     v = 0.5 - torch.asin(wo[:, 1]) / np.pi
 
-    env = cv.imread("./rendering_assets/env6.hdr")
+    env = cv.imread(os.path.join(abs_path_prefix, "rendering_assets/env6.hdr"))
     env = torch.tensor(env)
 
     # Convert UV coordinates to pixel coordinates
@@ -139,28 +141,8 @@ def shade_specular(mask, itx, normal, wi):
     
     return (mask * specular).detach()
 
-# def shade(mask, itx, normal, wi):
-#     env = cv.imread("data/env/env2.jpg")
-#     env = torch.tensor(env)
-    
-#     wo = reflect(wi, normal)
-#     wo = normalize(wo)
-    
-#     u = 0.5 + torch.atan2(wo[:, 0], wo[:, 2]) / (2 * np.pi)
-#     v = 0.5 - torch.asin(wo[:, 1]) / np.pi
-
-#     # Convert UV coordinates to pixel coordinates
-#     height, width = env.shape[0], env.shape[1]
-#     x = (u * (width - 1)).clamp(0, width - 1).long()
-#     y = (v * (height - 1)).clamp(0, height - 1).long()
-
-#     # Get the environment map colors at the corresponding pixel coordinates
-#     colors = mask * env[y, x]
-
-#     return colors
-
 def shade_mirror(mask, itx, normal, wi):
-    env = cv.imread("./rendering_assets/env6.hdr")
+    env = cv.imread(os.path.join(abs_path_prefix, "rendering_assets/env6.hdr"))
     env = torch.tensor(env)
     
     wi = normalize(wi)
@@ -176,8 +158,7 @@ def shade_mirror(mask, itx, normal, wi):
     y = (v * (height - 1)) % height
     x = x.long()
     y = y.long()
-    # x = (u * (width - 1)).clamp(0, width - 1).long()
-    # y = (v * (height - 1)).clamp(0, height - 1).long()
+
 
     # Get the environment map colors at the corresponding pixel coordinates
     colors = env[y, x]
@@ -194,19 +175,18 @@ def shade_normal(mask, itx, normal, wi):
         n_copy[:, 2] = -1 * n[:, 2]
         normal = n_copy
     colors = (normal + 1) / 2
-    # import pdb; pdb.set_trace()
     return mask * colors
 
 def shade(mask, itx, normal, wi):
     if normal is None:
         normal = normalize(sdf_gradient(itx))
-    # return 1.0 * shade_specular(mask, itx, normal, wi) ** 20
-    # return shade_mirror(mask, itx, normal, wi)
+
     return shade_mirror(mask, itx, normal, wi) + \
            1.0 * shade_specular(mask, itx, normal, wi) ** 10
 
 def background(mask, img):
-    background = cv.imread('./rendering_assets/env6.hdr')
+    
+    background = cv.imread(os.path.join(abs_path_prefix, 'rendering_assets/env6.hdr'))
     backgronud = cv.GaussianBlur(background, (21, 21), 0)
     
     cropped = backgronud[
