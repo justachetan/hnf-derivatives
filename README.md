@@ -48,8 +48,9 @@ In order to view rendering results:
 ```bash
 conda activate hnf-render
 ```
-1. Now open the notebook `rendering.ipynb` and run the cells in order.
-2. Feel free to add your own shapes by training models as described above and adding settings for the shape in the `settings_dict` variable in the notebook.
+1. Now open the notebook `rendering.ipynb` and set the kernel to `hnf-render`.
+2. Select the shape you want in the dropdown and run the cells in order. 
+3. Feel free to add your own shapes by training models as described above and adding settings for the shape in the `settings_dict` variable in the notebook.
 
 
 

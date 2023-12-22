@@ -414,26 +414,3 @@ def interp3d(feat, query, eps=1e-8, kernel="linear"):
     
     return w_000 * feat_000 + w_001 * feat_001 + w_010 * feat_010 + w_011 * feat_011 + \
         w_100 * feat_100 + w_101 * feat_101 + w_110 * feat_110 + w_111 * feat_111
-
-# @jax.jit
-# def interp3d(feat, query, eps=1e-8):
-#     """Bilinear interpolation of [feat] using query points [query].
-    
-#     Args:
-#         [feat]:  shape=(H, W, D, dim), 
-#                  feat[0, 0] -> coordinate (-1, -1), feat[-1, -1] -> coordinate=(1, 1)
-#         [query]: shape=(..., 3), range [-1, 1].
-#         [order]: int, what's the order of the spline.
-#     Returns:
-#         [out]: shape=(..., D), same batch dimension as [query].
-#     """
-#     H, W, D = feat.shape[:3]
-#     qshape = query.shape
-#     query_f = query.reshape(-1, 3).T
-#     query_f = 0.5 * (query_f + 1) * jnp.array([H - 1, W - 1, D - 1]).reshape(3, 1)
-#     out_f = jnp.concatenate([
-#         jax.scipy.ndimage.map_coordinates(feat[..., i], query_f, 1)[..., None]
-#         for i in range(feat.shape[-1])], axis=-1)
-#     return out_f.reshape(*qshape[:-1], feat.shape[-1])
-
-# interp3d = jax.jit(interp3d, static_argnums=3)
