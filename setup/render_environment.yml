@@ -179,4 +179,3 @@ dependencies:
     - werkzeug==2.3.6
     - yarl==1.9.2
     - zipp==3.16.2
-prefix: /home/ac2538/.conda/envs/fd-ext-nie
