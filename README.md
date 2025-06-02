@@ -61,13 +61,11 @@ conda activate hnf-render
 If you found the code in this repository useful, please consider citing our paper:
 
 ```
-@misc{chetan2023accurate,
+@inproceedings{chetan2025accurate,
       title={Accurate Differential Operators for Hybrid Neural Fields}, 
       author={Aditya Chetan and Guandao Yang and Zichen Wang and Steve Marschner and Bharath Hariharan},
-      year={2023},
-      eprint={2312.05984},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+      year={2025},
+      booktitle={CVPR},
 }
 ```
 
