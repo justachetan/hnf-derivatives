@@ -100,6 +100,14 @@
           <div class="is-size-5 publication-authors">
             <span class="author-block"><img src="static/images/cornell_logo_simple_b31b1b.png" width="200"></span>
           </div>
+          <div class="columns is-centered" style="margin-bottom: 0em">
+              <div class="column is-max-desktop has-text-centered">
+                  <h1 class="title is-4 publication-title" style="margin-bottom:0rem">
+                      <strong>CVPR 2025</strong>
+                  </h1>
+              </div>
+          </div>
+
 
           <div class="column has-text-centered">
             <div class="publication-links">
@@ -208,187 +216,139 @@
         
         
         <h2 class="title is-3">Results</h2>
-        <p>We evaluate our methods on hybrid neural SDFs of 3D shapes from the <span class="dnerf"><a href="https://www.cg.tuwien.ac.at/research/publications/2020/erler-2020-p2s/">FamousShape</a></span> dataset. We compare normals and mean curvatures obtained from our operators with baselines like autodiff and finite-difference stencils. We experiment with tree type of hybrid neural fields: <span class="dnerf"><a href="https://nvlabs.github.io/instant-ngp/">Instant NGP</a></span>, Dense Grid, and <span class="dnerf"><a href="https://nvlabs.github.io/eg3d/">Tri-plane</a></span> (only post hoc analysis).</p>
+        <p>We evaluate our methods on hybrid neural SDFs of 3D shapes from the <span class="dnerf"><a href="https://www.cg.tuwien.ac.at/research/publications/2020/erler-2020-p2s/">FamousShape</a></span> dataset.  
+          We experiment with tree type of hybrid neural fields: <span class="dnerf"><a href="https://nvlabs.github.io/instant-ngp/">Instant NGP</a></span>, Dense Grid, and <span class="dnerf"><a href="https://nvlabs.github.io/eg3d/">Tri-plane</a></span> (only post hoc analysis).
+        Below, we show the evaluation results for <span class="dnerf">Instant NGP</span>. For detailed results, please refer to our paper.</p>
         
-        <p>Our <b>post hoc operators</b> are able to provide more accurate derivatives than finite-difference or autodiff baselines.</p>
+        <p>Our <b>post hoc operators</b> are able to provide more accurate derivatives than finite-difference or autodiff baselines, and perform on-par, if not better than Monte Carlo approaches like gaussian averaging of autodiff derivatives.</p>
         
         <table id="table1">
-          <caption><strong>Table 1. Operator Evaluation:</strong> We compare against autodiff (AD) and finite difference (FD) baselines. Note that our approach provides more accurate surface normals and mean curvature than the baselines.</caption>
+          <caption><strong>Table 1. Post Hoc Operator Evaluation for <span class="dnerf">Instant NGP</span></strong>: We compare our operators with baselines like autodiff (AD), finite-difference stencils (FD), stochastic finite-difference (SFD), and gaussian averaging of autodiff (GAD).</caption>
           <thead>
-              <tr>
-                  <th>Model</th>
-                  <th>Method</th>
-                  <th colspan="4" style="text-align: center;">Surface Normal</th>
-                  <th  style="text-align: left;">Mean<br> Curvature</th>
-              </tr>
-              <tr>
-                  <th></th>
-                  <th></th>
-                  <th>L2 &darr;</th>
-                  <th>Ang &darr;</th>
-                  <th>AA@1 &uarr;</th>
-                  <th>AA@2 &uarr;</th>
-                  <th>RRE &darr;</th>
-              </tr>
+            <tr>
+              <th rowspan="2">Method</th>
+              <th colspan="4" style="text-align: center;">Surface Normal</th>
+              <th rowspan="2">RRE &darr;</th>
+            </tr>
+            <tr>
+              <th>L2 &darr;</th>
+              <th>Ang &darr;</th>
+              <th>AA@1 &uarr;</th>
+              <th>AA@2 &uarr;</th>
+            </tr>
           </thead>
           <tbody>
-              <tr>
-                  <td rowspan="3"><span class="dnerf">Instant NGP</span></td>
-                  <td>AD</td>
-                  <td>0.21</td>
-                  <td>12.40</td>
-                  <td>1.58</td>
-                  <td>6.12</td>
-                  <td>-</td>
-              </tr>
-              <tr>
-                  <td>FD</td>
-                  <td>0.07</td>
-                  <td>4.20</td>
-                  <td>26.86</td>
-                  <td>55.22</td>
-                  <td>3.67</td>
-              </tr>
-              <tr class="bottom-border">
-                  <td>Ours</td>
-                  <td><strong>0.05</strong></td>
-                  <td><strong>2.80</strong></td>
-                  <td><strong>42.92</strong></td>
-                  <td><strong>67.90</strong></td>
-                  <td><strong>0.89</strong></td>
-              </tr>
-              <tr>
-                  <td rowspan="3">Dense Grid</td>
-                  <td>AD</td>
-                  <td>0.11</td>
-                  <td>6.55</td>
-                  <td>11.49</td>
-                  <td>29.40</td>
-                  <td>-</td>
-              </tr>
-              <tr>
-                  <td>FD</td>
-                  <td>0.07</td>
-                  <td>3.97</td>
-                  <td>30.66</td>
-                  <td>55.06</td>
-                  <td>2.62</td>
-              </tr>
-              <tr class="bottom-border">
-                  <td>Ours</td>
-                  <td><strong>0.06</strong></td>
-                  <td><strong>3.31</strong></td>
-                  <td><strong>38.95</strong></td>
-                  <td><strong>62.65</strong></td>
-                  <td><strong>0.89</strong></td>
-              </tr>
-              <tr>
-                  <td rowspan="3"><span class="dnerf">Tri-plane</span></td>
-                  <td>AD</td>
-                  <td>0.15</td>
-                  <td>8.59</td>
-                  <td>3.61</td>
-                  <td>13.13</td>
-                  <td>-</td>
-              </tr>
-              <tr>
-                  <td>FD</td>
-                  <td>0.07</td>
-                  <td>4.19</td>
-                  <td>23.42</td>
-                  <td>51.27</td>
-                  <td>4.12</td>
-              </tr>
-              <tr class="bottom-border">
-                  <td>Ours</td>
-                  <td><strong>0.06</strong></td>
-                  <td><strong>3.23</strong></td>
-                  <td><strong>35.67</strong></td>
-                  <td><strong>62.74</strong></td>
-                  <td><strong>0.90</strong></td>
-              </tr>
-            </tbody>
+            <tr>
+              <td>AD</td>
+              <td>0.21</td>
+              <td>12.40</td>
+              <td>1.58</td>
+              <td>6.12</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>FD</td>
+              <td>0.07</td>
+              <td>4.20</td>
+              <td>26.86</td>
+              <td>55.22</td>
+              <td>3.67</td>
+            </tr>
+            <tr>
+              <td>GAD</td>
+              <td>0.05</td>
+              <td>2.99</td>
+              <td>38.35</td>
+              <td>66.86</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>SFD</td>
+              <td>0.95</td>
+              <td>57.67</td>
+              <td>0.01</td>
+              <td>0.07</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>Ours</td>
+              <td><strong>0.05</strong></td>
+              <td><strong>2.80</strong></td>
+              <td><strong>42.92</strong></td>
+              <td><strong>67.90</strong></td>
+              <td><strong>0.89</strong></td>
+            </tr>
+          </tbody>
         </table>
 
-        <p>Our <b>fine-tuning</b> approach also yields more accurate autodiff operators than directly applying autodiff, while preserving the fidelity of the original neural field.</p>
+        <p>Our <b>fine-tuning</b> approach also yields more accurate autodiff operators than directly applying autodiff, while preserving the fidelity of the original neural field. 
+          Our approach also performs better than traditional regularization approaches like Eikonal regularization that were proposed to encourage smoother iso-surfaces in neural fields.</p>
 
         <table id="table2">
-          <caption><strong>Table 2. Effect of Fine-tuning:</strong> Our fine-tuning approach improves the accuracy of surface normals obtained from automatic differentiation. We compare autodiff operators before (first row) and after fine-tuning.</caption>
+          <caption><strong>Table 2. Fine-tuning / <mark style="background-color: #fff2cc;">Regularization</mark> Comparison for <span class="dnerf">Instant NGP</span></strong>  Our fine-tuning approach improves the accuracy of surface normals obtained from automatic differentiation. We compare autodiff operators before (first row) and after fine-tuning.</caption>
           <thead>
-              <tr class="bottom-border">
-                  <th rowspan="2">Model</th>
-                  <th rowspan="2">Fine-tuning operator</th>
-                  <th colspan="4" class="bottom-border" style="text-align: center;">Surface Normal</th>
-                  <th colspan="2" class="bottom-border" style="text-align: center;">Mesh Reconstruction</th>
-              </tr>
-              <tr>
-                  <th>L2 &darr;</th>
-                  <th>Ang &darr;</th>
-                  <th>AA@1 &uarr;</th>
-                  <th>AA@2 &uarr;</th>
-                  <th>CD &darr;</th>
-                  <th>F-Score &uarr;</th>
-              </tr>
+            <tr>
+              <th rowspan="2">Method</th>
+              <th colspan="4" style="text-align: center;">Surface Normal</th>
+              <th colspan="2" style="text-align: center;">Mesh Reconstruction</th>
+            </tr>
+            <tr>
+              <th>L2 &darr;</th>
+              <th>Ang &darr;</th>
+              <th>AA@1 &uarr;</th>
+              <th>AA@2 &uarr;</th>
+              <th>Chamfer Distance &darr;</th>
+              <th>F-Score &uarr;</th>
+            </tr>
           </thead>
           <tbody>
-              <tr>
-                  <td rowspan="3"><span class="dnerf">Instant NGP</span></td>
-                  <td>-</td>
-                  <td>0.21</td>
-                  <td>12.40</td>
-                  <td>1.58</td>
-                  <td>6.12</td>
-                  <td>9.24 &times; 10<sup>-4</sup></td>
-                  <td>93.07</td>
-              </tr>
-              <tr>
-                  <td>Finite difference</td>
-                  <td>0.08</td>
-                  <td>5.14</td>
-                  <td>21.16</td>
-                  <td>46.63</td>
-                  <td>9.35 &times; 10<sup>-4</sup></td>
-                  <td>90.24</td>
-              </tr>
-              <tr class="bottom-border">
-                  <td>Polynomial-fit</td>
-                  <td><strong>0.05</strong></td>
-                  <td><strong>3.19</strong></td>
-                  <td><strong>33.60</strong></td>
-                  <td><strong>60.24</strong></td>
-                  <td>9.28 &times; 10<sup>-4</sup></td>
-                  <td>92.28</td>
-              </tr>
-              <tr>
-                  <td rowspan="3">Dense Grid</td>
-                  <td>-</td>
-                  <td>0.11</td>
-                  <td>6.56</td>
-                  <td>11.42</td>
-                  <td>29.37</td>
-                  <td>9.26 &times; 10<sup>-4</sup></td>
-                  <td>89.83</td>
-              </tr>
-              <tr>
-                  <td>Finite difference</td>
-                  <td>0.09</td>
-                  <td>5.09</td>
-                  <td>18.82</td>
-                  <td>41.52</td>
-                  <td>9.23 &times; 10<sup>-4</sup></td>
-                  <td>88.94</td>
-              </tr>
-              <tr class="bottom-border">
-                  <td>Polynomial-fit</td>
-                  <td><strong>0.08</strong></td>
-                  <td><strong>4.40</strong></td>
-                  <td><strong>29.32</strong></td>
-                  <td><strong>51.40</strong></td>
-                  <td>9.25 &times; 10<sup>-4</sup></td>
-                  <td>87.66</td>
-              </tr>
+            <tr>
+              <td>-</td>
+              <td>0.21</td>
+              <td>12.40</td>
+              <td>1.58</td>
+              <td>6.12</td>
+              <td>9.24 &times; 10<sup>-4</sup></td>
+              <td>93.07</td>
+            </tr>
+            <tr style="background-color: #fff2cc;">
+              <td>Eikonal</td>
+              <td>0.11</td>
+              <td>6.51</td>
+              <td>12.24</td>
+              <td>31.48</td>
+              <td>9.23 &times; 10<sup>-4</sup></td>
+              <td>92.90</td>
+            </tr>
+            <tr style="background-color: #fff2cc;">
+              <td>FD-Eikonal</td>
+              <td>0.10</td>
+              <td>6.17</td>
+              <td>13.71</td>
+              <td>33.27</td>
+              <td>9.25 &times; 10<sup>-4</sup></td>
+              <td>89.85</td>
+            </tr>
+            <tr>
+              <td>FD</td>
+              <td>0.08</td>
+              <td>5.14</td>
+              <td>21.16</td>
+              <td>46.63</td>
+              <td>9.35 &times; 10<sup>-4</sup></td>
+              <td>90.24</td>
+            </tr>
+            <tr>
+              <td>Ours</td>
+              <td><strong>0.05</strong></td>
+              <td><strong>3.19</strong></td>
+              <td><strong>33.60</strong></td>
+              <td><strong>60.24</strong></td>
+              <td>9.28 &times; 10<sup>-4</sup></td>
+              <td>92.28</td>
+            </tr>
           </tbody>
-      </table>
+        </table>
   
 
         
@@ -465,13 +425,11 @@
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
-    <pre><code>@misc{chetan2023accurate,
+    <pre><code>@inproceedings{chetan2025accurate,
       title={Accurate Differential Operators for Hybrid Neural Fields}, 
       author={Aditya Chetan and Guandao Yang and Zichen Wang and Steve Marschner and Bharath Hariharan},
-      year={2023},
-      eprint={2312.05984},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+      year={2025},
+      booktitle={CVPR},
 }</code></pre>
   </div>
 </section>
